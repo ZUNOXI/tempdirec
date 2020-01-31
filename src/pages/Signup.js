@@ -1,83 +1,64 @@
 import React, { useState } from "react";
-import Input from "@material-ui/core/Input";
-import FormLabel from "@material-ui/core/FormLabel";
+import InputLabel from "@material-ui/core/InputLabel";
+import Button from "@material-ui/core/Button";
+import OutlinedInput from "@material-ui/core/OutlinedInput";
 import { Grid } from "@material-ui/core";
 import axios from "axios";
+import FormControl from "@material-ui/core/FormControl";
+import IconButton from "@material-ui/core/IconButton";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import Chip from "@material-ui/core/Chip";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import Input from "@material-ui/core/Input";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 const Signup = () => {
-  const [id, setId] = useState("");
-  const [name, setName] = useState("");
-  const [nickname, setNickname] = useState("");
-  const [phonenumber, setPhonenumber] = useState("");
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [favor_ctg, setFavor_ctg] = useState("");
-  const [photo, setPhoto] = useState("");
-  const [birth_date, setBirth_date] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState("");
+  const [values, setValues] = useState({
+    id: "",
+    password: "",
+    confirm: "",
+    name: "",
+    nickname: "",
+    phonenumber: "",
+    email: "",
+    address: "",
+    favor_ctg: [],
+    photo: "",
+    birth_date: "",
+    showPassword: false
+  });
 
-  const setIdText = e => {
-    setId(e.target.value);
+  const handleChange = prop => event => {
+    setValues({ ...values, [prop]: event.target.value });
   };
 
-  const setNameText = e => {
-    setName(e.target.value);
+  const handleClickShowPassword = () => {
+    setValues({ ...values, showPassword: !values.showPassword });
   };
 
-  const setNicknameText = e => {
-    setNickname(e.target.value);
-  };
-
-  const setPhonenumberText = e => {
-    setPhonenumber(e.target.value);
-  };
-
-  const setEmailText = e => {
-    setEmail(e.target.value);
-  };
-
-  const setAddressText = e => {
-    setAddress(e.target.value);
-  };
-
-  const setFavor_ctgText = e => {
-    setFavor_ctg(e.target.value);
-  };
-
-  const setPhotoText = e => {
-    setPhoto(e.target.value);
-  };
-
-  const setBirth_dateText = e => {
-    setBirth_date(e.target.value);
-  };
-
-  const setPasswordText = e => {
-    setPassword(e.target.value);
-  };
-
-  const setConfirmText = e => {
-    setConfirm(e.target.value);
+  const handleMouseDownPassword = event => {
+    event.preventDefault();
   };
 
   const save = e => {
+    console.log(e.target.value);
     e.preventDefault();
     const URL = "http://localhost:9090/rest/addMem";
-    console.log(confirm);
     const data = {
-      uid: id,
-      upw: password,
-      uname: name,
-      unickname: nickname,
-      uphonenum: phonenumber,
-      uemail: email,
-      uaddress: address,
-      ufavor_ctg: favor_ctg,
-      uprofilephoto: photo,
-      ubirth_date: birth_date
+      uid: values.id,
+      upw: values.password,
+      uname: values.name,
+      unickname: values.nickname,
+      uphonenum: values.phonenumber,
+      uemail: values.email,
+      uaddress: values.address,
+      ufavor_ctg: values.favor_ctg,
+      uprofilephoto: values.photo,
+      ubirth_date: values.birth_date
     };
-    console.log(data);
     axios
       .post(URL, data)
       .then(res => {
@@ -86,53 +67,271 @@ const Signup = () => {
       .catch(e => console.log(e));
   };
 
+  const useStyles = makeStyles(theme => ({
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 120,
+      maxWidth: 300
+    },
+    chips: {
+      display: "flex",
+      flexWrap: "wrap"
+    },
+    chip: {
+      margin: 2
+    },
+    noLabel: {
+      marginTop: theme.spacing(3)
+    }
+  }));
+
+  const classes = useStyles();
+  const theme = useTheme();
+
+  const names = ["부동산", "주식", "암호화폐", "펀드", "기타"];
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250
+      }
+    }
+  };
+
+  function getStyles(name, personName, theme) {
+    return {
+      fontWeight:
+        personName.indexOf(name) === -1
+          ? theme.typography.fontWeightRegular
+          : theme.typography.fontWeightMedium
+    };
+  }
+
   return (
     <form onSubmit={save}>
-      <Grid
-        container
-        direction="column"
-        justify="flex-start"
-        alignItems="center"
-      >
-        <h1 style={{ color: "blue" }}>JAVER</h1>
-        <FormLabel htmlFor="id">아이디</FormLabel>
-        <Input name="id" id="id" onChange={setIdText} />
-        <br />
-        <FormLabel htmlFor="password">비밀번호</FormLabel>
-        <Input name="password" id="password" onChange={setPasswordText} />
-        <br />
-        <FormLabel htmlFor="confirm">비밀번호 재확인</FormLabel>
-        <Input name="confirm" id="confirm" onChange={setConfirmText} />
-        <br />
-        <FormLabel htmlFor="name">이름</FormLabel>
-        <Input name="name" id="name" onChange={setNameText} />
-        <br />
-        <FormLabel htmlFor="name">별명</FormLabel>
-        <Input name="nickname" id="nickname" onChange={setNicknameText} />
-        <br />
-        <FormLabel htmlFor="phonenumber">핸드폰</FormLabel>
-        <Input
-          name="phonenumber"
-          id="phonenumber"
-          onChange={setPhonenumberText}
-        />
-        <br />
-        <FormLabel htmlFor="email">이메일</FormLabel>
-        <Input name="email" id="email" onChange={setEmailText} />
-        <br />
-        <FormLabel htmlFor="address">주소</FormLabel>
-        <Input name="address" id="address" onChange={setAddressText} />
-        <br />
-        <FormLabel htmlFor="favor_ctg">선호분야</FormLabel>
-        <Input name="favor_ctg" id="favor_ctg" onChange={setFavor_ctgText} />
-        <br />
-        <FormLabel htmlFor="photo">프로필사진</FormLabel>
-        <Input name="photo" id="photo" onChange={setPhotoText} />
-        <br />
-        <FormLabel htmlFor="birth_date">생년월일</FormLabel>
-        <Input name="birth_date" id="birth_date" onChange={setBirth_dateText} />
-        <br />
-        <Input type="submit" value="제출" />
+      <Grid container direction="row" justify="center">
+        <Grid item xs={6}>
+          <Grid
+            container
+            direction="column"
+            justify="flex-start"
+            alignItems="center"
+          >
+            <h1 style={{ color: "blue", fontSize: "60px" }}>JAVER</h1>
+            <FormControl fullWidth variant="outlined">
+              <InputLabel htmlFor="id">아이디</InputLabel>
+              <OutlinedInput
+                name="id"
+                id="id"
+                onChange={handleChange("id")}
+                variant="outlined"
+                labelWidth={50}
+              />
+            </FormControl>
+
+            <br />
+            <FormControl fullWidth variant="outlined">
+              <InputLabel htmlFor="password">비밀번호</InputLabel>
+              <OutlinedInput
+                variant="outlined"
+                name="password"
+                id="password"
+                onChange={handleChange("password")}
+                labelWidth={65}
+                type={values.showPassword ? "text" : "password"}
+                value={values.password}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+
+            <br />
+            <FormControl fullWidth variant="outlined">
+              <InputLabel htmlFor="password">비밀번호 확인</InputLabel>
+              <OutlinedInput
+                variant="outlined"
+                name="confirm"
+                id="confirm"
+                onChange={handleChange("confirm")}
+                labelWidth={100}
+                type={values.showPassword ? "text" : "password"}
+                value={values.confirm}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+
+            <br />
+            <FormControl fullWidth variant="outlined">
+              <InputLabel htmlFor="name">이름</InputLabel>
+              <OutlinedInput
+                variant="outlined"
+                name="name"
+                id="name"
+                onChange={handleChange("name")}
+                labelWidth={35}
+              />
+            </FormControl>
+
+            <br />
+            <FormControl fullWidth variant="outlined">
+              <InputLabel htmlFor="name">별명</InputLabel>
+              <OutlinedInput
+                variant="outlined"
+                name="nickname"
+                id="nickname"
+                onChange={handleChange("nickname")}
+                labelWidth={35}
+              />
+            </FormControl>
+            <br />
+            <FormControl fullWidth variant="outlined">
+              <InputLabel htmlFor="name">핸드폰 번호</InputLabel>
+              <OutlinedInput
+                variant="outlined"
+                name="phonenumber"
+                id="phonenumber"
+                onChange={handleChange("phonenumber")}
+                labelWidth={85}
+              />
+            </FormControl>
+
+            <br />
+            <FormControl fullWidth variant="outlined">
+              <InputLabel htmlFor="name">이메일</InputLabel>
+              <OutlinedInput
+                label="이메일"
+                variant="outlined"
+                name="email"
+                id="email"
+                onChange={handleChange("email")}
+                labelWidth={50}
+              />
+            </FormControl>
+            <br />
+            <FormControl fullWidth variant="outlined">
+              <InputLabel htmlFor="address">주소</InputLabel>
+              <OutlinedInput
+                variant="outlined"
+                name="address"
+                id="address"
+                labelWidth={35}
+                onChange={handleChange("address")}
+              />
+            </FormControl>
+            <br />
+            <FormControl fullWidth variant="outlined">
+              <InputLabel id="demo-mutiple-chip-label">선호분야</InputLabel>
+              <Select
+                labelId="demo-mutiple-chip-label"
+                id="demo-mutiple-chip"
+                multiple
+                value={values.favor_ctg}
+                onChange={handleChange("favor_ctg")}
+                input={<Input id="select-multiple-chip" />}
+                renderValue={selected => (
+                  <div className={classes.chips}>
+                    {selected.map(value => (
+                      <Chip
+                        key={value}
+                        label={value}
+                        className={classes.chips}
+                      />
+                    ))}
+                  </div>
+                )}
+                MenuProps={MenuProps}
+              >
+                {names.map(name => (
+                  <MenuItem
+                    key={name}
+                    value={name}
+                    style={getStyles(name, values.favor_ctg, theme)}
+                  >
+                    {name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <br />
+
+            <FormControl fullWidth variant="outlined">
+              <InputLabel htmlFor="address">선호분야</InputLabel>
+              <OutlinedInput
+                variant="outlined"
+                name="favor_ctg"
+                id="favor_ctg"
+                onChange={handleChange("favor_ctg")}
+                labelWidth={65}
+              />
+            </FormControl>
+
+            <div style={{ width: "100%" }}>
+              <p
+                style={{
+                  fontSize: "10px",
+                  marginBottom: "2px",
+                  color: "#6E6E6E",
+                  fontWeight: "bold"
+                }}
+              >
+                프로필사진
+              </p>
+            </div>
+            <FormControl fullWidth variant="outlined">
+              <OutlinedInput
+                variant="outlined"
+                name="photo"
+                id="photo"
+                onChange={handleChange("photo")}
+                type="file"
+              />
+            </FormControl>
+            <br />
+            <FormControl fullWidth variant="outlined">
+              <InputLabel htmlFor="birth_date">생년월일</InputLabel>
+              <OutlinedInput
+                variant="outlined"
+                name="birth_date"
+                id="birth_date"
+                onChange={handleChange("birth_date")}
+                labelWidth={65}
+              />
+            </FormControl>
+            <br />
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              style={{ fontSize: "20px", height: "56px", width: "100%" }}
+            >
+              가입하기
+            </Button>
+            <footer style={{ height: "30px" }}></footer>
+          </Grid>
+        </Grid>
       </Grid>
     </form>
   );

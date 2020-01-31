@@ -62,7 +62,7 @@ const Question = () => {
       </Grid>
       <Grid item xs={9}>
         {datas.map(data => (
-          <Board one={data} />
+          <Board key={data.id} one={data} />
         ))}
       </Grid>
       <Grid item xs={3}></Grid>

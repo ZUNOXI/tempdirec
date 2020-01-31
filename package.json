@@ -2,6 +2,7 @@
   "name": "javer",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://dapi.kakao.com",
   "dependencies": {
     "@material-ui/core": "^4.8.3",
     "@material-ui/icons": "^4.5.1",
@@ -14,6 +15,8 @@
     "package.json": "^2.0.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-kakao-maps": "github:Musma/react-kakao-maps",
+    "react-kakaomap-api": "^0.1.19",
     "react-material-ui-carousel": "^1.1.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.0",

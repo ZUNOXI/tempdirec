@@ -5,7 +5,7 @@ import questionicon from "../images/questionicon.png";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import AppBar from "@material-ui/core/AppBar";
-import axios from "axios";
+// import axios from "axios";
 // import { withStyles } from "@material-ui/core/styles";
 
 function a11yProps(index) {
@@ -14,20 +14,24 @@ function a11yProps(index) {
   };
 }
 
-const saveQuestion = datas => {
-  console.log(datas);
-  const url = "";
-  axios.post(url, datas);
-};
+// const saveQuestion = datas => {
+//   const url = "";
+//   axios.post(url, datas);
+// };
+
+const url = "";
 
 const CreateQuestion = () => {
   const [value, setValue] = React.useState(0);
+  const [cateinfo, setCateinfo] = React.useState("stock");
+  const words = ["stock", "estate", "fund", "coin", "other"];
   const handleChange = (event, newValue) => {
+    setCateinfo(words[newValue]);
     setValue(newValue);
   };
 
   return (
-    <form onSubmit={saveQuestion}>
+    <form action={url} method="post">
       <Grid
         container
         direction="column"
@@ -52,13 +56,18 @@ const CreateQuestion = () => {
           />
         </Grid>
         <Grid>
+          <TextField
+            style={{ width: "0%", height: "0%" }}
+            name="category"
+            value={cateinfo}
+          />
           <AppBar position="static">
-            <Tabs value={value} onChange={handleChange}>
-              <Tab label="주식" {...a11yProps(0)} />
-              <Tab label="부동산" {...a11yProps(1)} />
-              <Tab label="펀드" {...a11yProps(2)} />
-              <Tab label="코인" {...a11yProps(3)} />
-              <Tab label="기타" {...a11yProps(4)} />
+            <Tabs value={value} onChange={handleChange} name="category">
+              <Tab label="주식" {...a11yProps(0)} name="stock" />
+              <Tab label="부동산" {...a11yProps(1)} name="estate" />
+              <Tab label="펀드" {...a11yProps(2)} name="fund" />
+              <Tab label="코인" {...a11yProps(3)} name="coin" />
+              <Tab label="기타" {...a11yProps(4)} name="other" />
             </Tabs>
           </AppBar>
         </Grid>

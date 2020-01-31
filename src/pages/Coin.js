@@ -8,48 +8,115 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import { Divider } from "@material-ui/core";
+import { coinName } from "./CoinName.js";
+import crypto from "../images/crypto.jpg";
+// import { Divider } from "@material-ui/core";
 
 const useStyles = makeStyles({
   table: {
     minWidth: 650
   }
 });
+/* 3자리 단위로 콤마 */
+function addComma(number) {
+  var number_parts = number.split(".");
+  var regexp = /\B(?=(\d{3})+(?!\d))/g;
+  if (number_parts.length > 1) {
+    return number_parts[0].replace(regexp, ",") + "." + number_parts[1];
+  } else {
+    return number.replace(regexp, ",");
+  }
+}
 
+/* api로 데이터 가져와서 정리하기 */
 const Coindata = () => {
   const [rows, setRows] = useState([]);
   useEffect(() => {
     axios
       .post("https://api.bithumb.com/public/ticker/ALL")
       .then(res => {
+        console.log(res.data.data);
         const all_rows = [];
         for (let [key, value] of Object.entries(res.data.data)) {
-          all_rows.push({
-            name: key,
-            opening_price: value.opening_price,
-            acc_trade_value: value.acc_trade_value,
-            fluctate_24H: value.fluctate_24H,
-            fluctate_rate_24H: value.fluctate_rate_24H
-          });
+          if (key !== "date") {
+            all_rows.push({
+              name: key,
+              opening_price: `${addComma(value.opening_price)}원`,
+              acc_trade_value: `${addComma(value.acc_trade_value)}원`,
+              fluctate_24H: `${addComma(value.fluctate_24H)}원`,
+              fluctate_rate_24H: `${value.fluctate_rate_24H}%`
+            });
+          }
         }
         setRows(all_rows);
       })
       .catch(e => console.log(e));
   }, []);
 
-  return <DenseTable rows={rows} />;
-};
-
-// function createData(name, acc_trade_value, fluctate_24H, fluctate_rate_24H) {
-//   return { name, acc_trade_value, fluctate_24H, fluctate_rate_24H};
-// }
-
-const DenseTable = ({ rows }) => {
-  const classes = useStyles();
-  console.log(rows);
   return (
     <div>
-      <p>🔥오늘의 비트코인🔥</p>
+      <CoinHeader />
+      <DenseTable rows={rows} />
+    </div>
+  );
+};
+
+/*header 달기 */
+const CoinHeader = () => (
+  <header
+    style={{
+      borderRadius: "5px",
+      marginTop: "30px"
+      // background: "white"
+    }}
+  >
+    <img
+      src={crypto}
+      alt=""
+      style={{
+        height: "auto",
+        width: "100%",
+        opacity: "1",
+        // filter: "blur(1px)",
+        borderRadius: "5px"
+      }}
+    />
+  </header>
+);
+/* 비트코인 table */
+const DenseTable = ({ rows }) => {
+  const classes = useStyles();
+
+  /* 등락 색깔 바꾸기 */
+  const table = row => {
+    if (row.fluctate_24H[0] === "-") {
+      return (
+        <>
+          <TableCell align="right" style={{ color: "blue" }}>
+            ▼ {row.fluctate_24H}
+          </TableCell>
+          <TableCell align="right" style={{ color: "blue" }}>
+            ▼ {row.fluctate_rate_24H}
+          </TableCell>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <TableCell align="right" style={{ color: "red" }}>
+            ▲ {row.fluctate_24H}
+          </TableCell>
+          <TableCell align="right" style={{ color: "red" }}>
+            ▲ {row.fluctate_rate_24H}
+          </TableCell>
+        </>
+      );
+    }
+  };
+
+  return (
+    <div>
+      <span>오늘의 비트코인</span>
       <TableContainer component={Paper}>
         <Table
           className={classes.table}
@@ -69,12 +136,13 @@ const DenseTable = ({ rows }) => {
             {rows.map((row, idx) => (
               <TableRow key={row.name}>
                 <TableCell component="th" scope="data">
-                  {idx}
+                  {idx + 1}
                 </TableCell>
-                <TableCell align="right">{row.name}</TableCell>
+                <TableCell align="right">
+                  {row.name} <p>{coinName["bithumb"][row.name]}</p>
+                </TableCell>
                 <TableCell align="right">{row.opening_price}</TableCell>
-                <TableCell align="right">{row.fluctate_24H}</TableCell>
-                <TableCell align="right">{row.fluctate_rate_24H}</TableCell>
+                {table(row)}
               </TableRow>
             ))}
           </TableBody>

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Grid, Button, Icon, TextField } from "@material-ui/core";
+import { Grid, Button, Icon } from "@material-ui/core";
 import ErrorIcon from "@material-ui/icons/Error";
 import MessageIcon from "@material-ui/icons/Message";
 import styled from "styled-components";
 import CreateAnswer from "../components/CreateAnswer";
 import Answer from "../components/Answer";
+import Comment from "../components/Comment";
 // import qa from "../images/Q&A.png";
 // import questionicon from "../images/questionicon.png";
 // import axios from "axios";
@@ -96,6 +97,30 @@ const answerdata = [
   []
 ];
 
+const replydata = [
+  [
+    [
+      {
+        id: 1,
+        writer: "윤선스",
+        content: "낚이면 끝임",
+        date: 200129
+      },
+      {
+        id: 2,
+        writer: "요호",
+        content: "공부많이 해야함",
+        date: 200129
+      }
+    ],
+    [],
+    [],
+    []
+  ],
+  [],
+  []
+];
+
 const DetailQuestion = ({ match }) => {
   // eslint-disable-next-line no-unused-expressions
   const [qbool, setQbool] = useState(false);
@@ -117,50 +142,9 @@ const DetailQuestion = ({ match }) => {
     }
   };
 
-  const showqmentel = exist => {
-    if (exist) {
-      console.log(exist);
-      return (
-        <div>
-          {exist.map(one => (
-            <div>
-              <b>
-                <p style={{ fontSize: "15px" }}>{one.writer}</p>
-              </b>
-              <p style={{ fontSize: "10px" }}>{one.content}</p>
-              <p style={{ fontSize: "10px" }}>{one.date}</p>
-              <hr style={{ border: "0.5px solid #c8d0d0" }} />
-            </div>
-          ))}
-        </div>
-      );
-    } else {
-      return <div>왜</div>;
-    }
-  };
-
   const showqment = one => {
     if (one) {
-      return (
-        <div style={{ marginBottom: "20px" }}>
-          <TextField
-            multiline
-            rows="6"
-            variant="outlined"
-            style={{
-              backgroundColor: "#fafafa",
-              width: "100%",
-              marginBottom: "10px"
-            }}
-          />
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button variant="contained" color="primary">
-              등록
-            </Button>
-          </div>
-          <div>{showqmentel(commentdata[match.params.id - 1])}</div>
-        </div>
-      );
+      return <Comment data={commentdata[match.params.id - 1]} />;
     } else {
       return <div></div>;
     }
@@ -183,7 +167,9 @@ const DetailQuestion = ({ match }) => {
       style={{ marginTop: "10px" }}
     >
       <Grid>
-        <h1>JAVER Q&A</h1>
+        <a href="./" style={{ textDecoration: "none", color: "black" }}>
+          <h1>JAVER Q&A</h1>
+        </a>
       </Grid>
       <Grid
         style={{
@@ -249,7 +235,12 @@ const DetailQuestion = ({ match }) => {
       </p>
       <Grid style={{ width: "100%" }}>
         {answerdata[match.params.id - 1].map(data => (
-          <Answer key={data.id} data={data} />
+          <Answer
+            key={data.id}
+            data={data}
+            replydata={replydata[match.params.id - 1]}
+            idx={data.id}
+          />
         ))}
       </Grid>
     </Grid>
