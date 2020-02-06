@@ -88,7 +88,7 @@ const App = () => {
                 variant="h6"
                 className={"yo"}
                 style={{ color: "blue" }}
-              >
+              > 
                 JAVER
               </Typography>
             </Button>

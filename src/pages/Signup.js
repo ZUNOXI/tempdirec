@@ -26,12 +26,15 @@ const Signup = () => {
     email: "",
     address: "",
     favor_ctg: [],
-    photo: "",
+    photo: null,
     birth_date: "",
     showPassword: false
   });
 
   const handleChange = prop => event => {
+    if (prop === "photo") {
+    } else {
+    }
     setValues({ ...values, [prop]: event.target.value });
   };
 
@@ -276,18 +279,6 @@ const Signup = () => {
               </Select>
             </FormControl>
             <br />
-
-            <FormControl fullWidth variant="outlined">
-              <InputLabel htmlFor="address">선호분야</InputLabel>
-              <OutlinedInput
-                variant="outlined"
-                name="favor_ctg"
-                id="favor_ctg"
-                onChange={handleChange("favor_ctg")}
-                labelWidth={65}
-              />
-            </FormControl>
-
             <div style={{ width: "100%" }}>
               <p
                 style={{

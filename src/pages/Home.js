@@ -9,8 +9,8 @@ import RestoreIcon from "@material-ui/icons/Restore";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import Substock from "../components/Substock";
-// import Carousel from "react-material-ui-carousel";
 import Ctest from "../components/Ctest";
+import CardPart from "../components/CardPart";
 
 const useStyles = makeStyles({
   root: {
@@ -48,6 +48,23 @@ const Home = () => {
           width: "100%"
         }}
       >
+        <Grid
+          container
+          direction="row"
+          justify="center"
+          alignItems="center"
+          style={{ marginBottom: "5px" }}
+        >
+          <Grid item xs={4} style={{ backgroundColor: "blue" }}>
+            <CardPart />
+          </Grid>
+          <Grid item xs={4} style={{ backgroundColor: "lightblue" }}>
+            <CardPart />
+          </Grid>
+          <Grid item xs={4} style={{ backgroundColor: "blue" }}>
+            <CardPart />
+          </Grid>
+        </Grid>
         <Grid item xs={12}>
           <BottomNavigation
             value={value}
@@ -81,6 +98,11 @@ const Home = () => {
         }}
       >
         ㅇㅇㅇㅇ
+      </Grid>
+      <Grid
+        style={{ width: "100%", height: "10rem", backgroundColor: "#555555" }}
+      >
+        place
       </Grid>
     </Grid>
   );

@@ -1,0 +1,27 @@
+.section-headline h2 {
+    display: inline-block;
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 70px;
+    position: relative;
+    text-transform: capitalize;
+  }
+  
+  .section-headline h2::after {
+    border: 1px solid #333;
+    bottom: -20px;
+    content: "";
+    left: 0;
+    margin: 0 auto;
+    position: absolute;
+    right: 0;
+    width: 40%;
+  }
+
+  .section-headline.services-head>h2 {
+    margin-bottom: 25px;
+  }
+
+  .wellcome-text .section-headline p {
+    margin-bottom: 0;
+  }

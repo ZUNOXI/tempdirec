@@ -1,6 +1,8 @@
 import React from "react";
 import Carousel from "react-material-ui-carousel";
 import autoBind from "auto-bind";
+import estate_carousel from "../images/estate_carousel.png";
+
 import {
   //   FormLabel,
   //   FormControlLabel,
@@ -35,7 +37,8 @@ const items = [
   {
     name: "Lear Music Reader",
     description: "A PDF Reader specially designed for musicians.",
-    color: "#64ACC8"
+    color: "#64ACC8",
+    background: estate_carousel
   },
   {
     name: "Hash Code 2019",

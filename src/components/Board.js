@@ -48,14 +48,14 @@ const Board = ({ one }) => {
           style={{
             color: "black"
           }}
-          href={"/question/" + one.id}
+          href={"/question/" + one.bnum}
         >
           <div>
-            <h2>{one.title}</h2>
-            <p>{one.content}</p>
+            <h2>{one.btitle}</h2>
+            <p>{one.bcontent}</p>
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <p style={{ fontSize: "10px" }}>{one.like}</p>
-              <p style={{ fontSize: "10px" }}>{one.date}</p>
+              <p style={{ fontSize: "10px" }}>{one.bhit}</p>
+              <p style={{ fontSize: "10px" }}>{one.bcreation_date}</p>
             </div>
           </div>
         </StyledLink>

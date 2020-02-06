@@ -1,35 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Board from "../components/Board";
 import { Grid, Button } from "@material-ui/core";
 import qa from "../images/Q&A2.png";
+import axios from "axios";
 
 const Question = () => {
-  const datas = [
-    {
-      id: 1,
-      title: "재테크 추천 좀 해주세요!",
-      content: "사회 초년생인데 할만한 재테크 없을까요?",
-      like: 0,
-      view: 0,
-      date: 191231
-    },
-    {
-      id: 2,
-      title: "여기 머하는 곳임?",
-      content: "재테크로 돈 많이 범?",
-      like: 0,
-      view: 0,
-      date: 200101
-    },
-    {
-      id: 3,
-      title: "어떻게 해야할까",
-      content: "지금 주식이랑 코인중에 어디에 투자할지 고민중입니다",
-      like: 0,
-      view: 0,
-      date: 200121
-    }
-  ];
+  const [datas, setDatas] = React.useState([]);
+
+  useEffect(() => {
+    const url = "http://localhost:9090/api/board";
+    axios
+      .get(url)
+      .then(res => {
+        console.log(res);
+        console.log(res.data.resdata);
+        setDatas(res.data.resdata);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }, []);
+
   return (
     <Grid container style={{ marginTop: "10px" }}>
       <h1>묻고 답하기</h1>

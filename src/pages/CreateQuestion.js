@@ -5,7 +5,7 @@ import questionicon from "../images/questionicon.png";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import AppBar from "@material-ui/core/AppBar";
-// import axios from "axios";
+import axios from "axios";
 // import { withStyles } from "@material-ui/core/styles";
 
 function a11yProps(index) {
@@ -14,24 +14,49 @@ function a11yProps(index) {
   };
 }
 
-// const saveQuestion = datas => {
-//   const url = "";
-//   axios.post(url, datas);
-// };
+// const url = "http://localhost:9090/api/boardreg";
 
-const url = "";
-
-const CreateQuestion = () => {
-  const [value, setValue] = React.useState(0);
-  const [cateinfo, setCateinfo] = React.useState("stock");
+const CreateQuestion = ({ history }) => {
   const words = ["stock", "estate", "fund", "coin", "other"];
-  const handleChange = (event, newValue) => {
+  const [values, setValues] = React.useState({
+    id: "ssafy",
+    title: "",
+    content: "",
+    ctg: 0
+  });
+
+  const [tabs, setTabs] = React.useState(0);
+  const [cateinfo, setCateinfo] = React.useState("stock");
+
+  const handleChangetab = (event, newValue) => {
     setCateinfo(words[newValue]);
-    setValue(newValue);
+    setTabs(newValue);
+  };
+
+  const handleChange = prop => event => {
+    setValues({ ...values, [prop]: event.target.value });
+  };
+
+  const saveQuestion = e => {
+    e.preventDefault();
+    const url = "http://localhost:9090/api/boardreg";
+    const datas = {
+      uid: values.id,
+      btitle: values.title,
+      bcontent: values.content,
+      bctg: cateinfo
+    };
+    axios
+      .post(url, datas)
+      .then(res => {
+        history.push("/question");
+        console.log(res);
+      })
+      .catch(e => console.log(e));
   };
 
   return (
-    <form action={url} method="post">
+    <form onSubmit={saveQuestion} method="post">
       <Grid
         container
         direction="column"
@@ -49,20 +74,16 @@ const CreateQuestion = () => {
           <h1>질문</h1>
           <TextField
             id="title"
-            name="title"
+            name="btitle"
             label="제목"
             variant="outlined"
             style={{ width: "80%" }}
+            onChange={handleChange("title")}
           />
         </Grid>
         <Grid>
-          <TextField
-            style={{ width: "0%", height: "0%" }}
-            name="category"
-            value={cateinfo}
-          />
           <AppBar position="static">
-            <Tabs value={value} onChange={handleChange} name="category">
+            <Tabs value={tabs} onChange={handleChangetab} name="category">
               <Tab label="주식" {...a11yProps(0)} name="stock" />
               <Tab label="부동산" {...a11yProps(1)} name="estate" />
               <Tab label="펀드" {...a11yProps(2)} name="fund" />
@@ -74,9 +95,10 @@ const CreateQuestion = () => {
         <Grid style={{ width: "100%", marginTop: "10px" }}>
           <TextField
             id="content"
-            name="content"
+            name="bcontent"
             label="내용"
             variant="outlined"
+            onChange={handleChange("content")}
             multiline
             rows="20"
             style={{ width: "100%" }}
